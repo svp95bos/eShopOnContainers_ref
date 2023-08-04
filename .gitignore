@@ -283,3 +283,4 @@ src/**/inf.yaml
 
 .angular/
 /src/Services/Identity/Identity.API/keys/*.json
+/src/docker-compose-viz-mermaid-1.2.0.jar
