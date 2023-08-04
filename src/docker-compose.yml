@@ -157,4 +157,7 @@ services:
     build:
       context: .
       dockerfile: Services/Deviation/FeedbackReporting.API/Dockerfile
+    depends_on:
+      - sqldata
+      - rabbitmq
 
