@@ -22,7 +22,8 @@
         "webmvc": "StartDebugging",
         "webshoppingagg": "StartDebugging",
         "webspa": "StartDebugging",
-        "webstatus": "StartDebugging"
+        "webstatus": "StartDebugging",
+        "deviation-feedbackreporting-api": "StartDebugging"
       }
     }
   }

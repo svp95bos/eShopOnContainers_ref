@@ -143,6 +143,31 @@ services:
     ports:
       - "5111:80"
 
+  deviation-feedbackreporting-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Kestrel__Endpoints__HTTP__Url=http://0.0.0.0:80
+      - Kestrel__Endpoints__GRPC__Url=http://0.0.0.0:81
+      - Kestrel__Endpoints__GRPC__Protocols=Http2
+      - ConnectionStrings__FeedbackReportingDb=${ESHOP_AZURE_FEEDBACKREPORTING_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.Deviation.FeedbackReportingDb;User Id=sa;Password=Pass@word;Encrypt=False;TrustServerCertificate=true}
+      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - Identity__Url=http://identity-api
+      - Identity__ExternalUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
+      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - UseCustomizationData=True
+      - AzureServiceBusEnabled=False
+      - CheckUpdateTime=30000
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+      - UseLoadTest=${USE_LOADTEST:-False}
+      - PATH_BASE=/deviation-feedbackreporting-api
+      - GRPC_PORT=81
+      - PORT=80
+    ports:
+      - "5106:80"
+      - "9106:81"
+
   payment-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -297,6 +322,9 @@ services:
       - SelfUrl=http://webhooks-client/
     ports:
       - "5114:80"
+
+  
+    
 volumes:
   eshop-sqldata:
     external: false
@@ -304,4 +332,5 @@ volumes:
     external: false
   eshop-basketdata:
     external: false
+
 
