@@ -62,15 +62,6 @@ services:
       - sqldata
       - rabbitmq
 
-  deviation-feedbackreporting-api:
-    image: ${REGISTRY:-eshop}/deviation.feedbackreporting.api:${PLATFORM:-linux}-${TAG:-latest}
-    build:
-      context: .
-      dockerfile: Services/Deviation/Deviation.FeedbackReporting.API/Dockerfile
-    depends_on:
-      - sqldata
-      - rabbitmq
-
   payment-api:
     image: ${REGISTRY:-eshop}/payment.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -160,3 +151,10 @@ services:
       dockerfile: Web/WebhookClient/Dockerfile
     depends_on:
       - webhooks-api
+
+  feedbackreporting-api:
+    image: ${REGISTRY:-eshop}/feedbackreporting.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Deviation/FeedbackReporting.API/Dockerfile
+

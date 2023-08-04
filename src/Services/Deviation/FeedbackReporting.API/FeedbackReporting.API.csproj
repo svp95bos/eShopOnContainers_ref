@@ -4,10 +4,10 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API</RootNamespace>
-    <UserSecretsId>e4046e47-2cb6-446a-b98e-0f14f61f0a6b</UserSecretsId>
+    <UserSecretsId>139906a5-ace1-46a2-a981-65620547594b</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+    <DockerfileContext>..\..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>

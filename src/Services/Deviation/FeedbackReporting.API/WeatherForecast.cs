@@ -1,4 +1,4 @@
-namespace Deviation.FeedbackReporting.API;
+namespace FeedbackReporting.API;
 
 public class WeatherForecast
 {

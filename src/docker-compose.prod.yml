@@ -107,24 +107,7 @@ services:
     ports:
       - "5111:80"
 
-  deviation-feedbackreporting-api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_FEEDBACKREPORTING_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.Deviation.FeedbackReportingDb;User Id=sa;Password=Pass@word}
-      - Identity__Url=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - Identity__ExternalUrl=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
-      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}
-      - UseCustomizationData=True
-      - AzureServiceBusEnabled=False
-      - CheckUpdateTime=30000
-      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-      - OrchestratorType=${ORCHESTRATOR_TYPE}
-      - UseLoadTest=${USE_LOADTEST:-False}
-    ports:
-      - "80"   # The API Gateway redirects and access through the internal port (80).
+  
 
   webspa:
     environment:
