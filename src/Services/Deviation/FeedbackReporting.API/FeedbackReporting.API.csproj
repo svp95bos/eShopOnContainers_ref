@@ -8,12 +8,25 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
     <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+    <RootNamespace>Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
+    <PackageReference Include="Dapper" />
+    <PackageReference Include="FluentValidation.AspNetCore" />
+    <PackageReference Include="Grpc.AspNetCore" />
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="Polly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
+    <ProjectReference Include="..\..\Services.Common\Services.Common.csproj" />
   </ItemGroup>
 
 </Project>

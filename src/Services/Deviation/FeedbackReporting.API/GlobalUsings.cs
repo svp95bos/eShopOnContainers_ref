@@ -1,0 +1,15 @@
+﻿global using Microsoft.AspNetCore.Mvc;
+global using MediatR;
+global using FluentValidation;
+global using Google.Protobuf.Collections;
+global using Grpc.Core;
+global using MediatR;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Design;
+global using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+global using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
+global using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Extensions;
+global using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF;
+global using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF.Services;

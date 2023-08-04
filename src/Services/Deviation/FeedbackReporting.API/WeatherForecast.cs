@@ -1,4 +1,4 @@
-namespace FeedbackReporting.API;
+namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API;
 
 public class WeatherForecast
 {
