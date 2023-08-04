@@ -324,7 +324,7 @@ public static class CommonExtensions
                     tags: new string[] { "ready" }),
 
             _ => hcBuilder.AddRabbitMQ(
-                    _ => $"amqp://{configuration.GetRequiredConnectionString("EventBus")}",
+                    _ = $"amqp://{configuration.GetRequiredConnectionString("EventBus")}",
                     name: "rabbitmq",
                     tags: new string[] { "ready" })
         };
