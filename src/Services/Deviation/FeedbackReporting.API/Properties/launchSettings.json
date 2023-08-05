@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Ordering.API": {
+    "FeedbackReporting.API": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
