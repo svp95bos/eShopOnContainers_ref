@@ -27,6 +27,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
     <ProjectReference Include="..\..\Services.Common\Services.Common.csproj" />
+    <ProjectReference Include="..\FeedbackReporting.Infrastructure\FeedbackReporting.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Proto\" />
   </ItemGroup>
 
 </Project>

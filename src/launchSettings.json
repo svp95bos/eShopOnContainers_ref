@@ -23,7 +23,7 @@
         "webshoppingagg": "StartDebugging",
         "webspa": "StartDebugging",
         "webstatus": "StartDebugging",
-        "feedbackreporting.api": "StartDebugging"
+        "feedbackreporting-api": "StartDebugging"
       }
     }
   }

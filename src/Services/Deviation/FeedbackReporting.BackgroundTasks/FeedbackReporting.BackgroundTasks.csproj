@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-FeedbackReporting.BackgroundTasks-ab6b57e1-877b-4312-8968-7fa7d8499cf9</UserSecretsId>
+    <RootNamespace>Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.BackgroundTasks</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
+    <PackageReference Include="Dapper" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services.Common\Services.Common.csproj" />
+  </ItemGroup>
+  
+</Project>
