@@ -2,6 +2,6 @@
 
 public interface IFeedbackReportQueries
 {
-    Task<FeedbackReportViewModel> GetFeedbackReportAsync(Guid id);
-    Task<FeedbackReportViewModel> GetFeedbackReportAsync(int id);
+    Task<FeedbackReport> GetFeedbackReportAsync(Guid id);
+    Task<FeedbackReport> GetFeedbackReportAsync(int id);
 }

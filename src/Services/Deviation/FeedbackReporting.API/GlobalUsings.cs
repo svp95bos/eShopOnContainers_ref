@@ -20,4 +20,8 @@ global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.AP
 global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.Infrastructure;
 global using System.Data.Common;
 global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Application.IntegrationEvents;
-global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.Infrastructure;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Application.Queries;
+global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Application.Models;
+global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Extensions;
+global using System.Runtime.Serialization;

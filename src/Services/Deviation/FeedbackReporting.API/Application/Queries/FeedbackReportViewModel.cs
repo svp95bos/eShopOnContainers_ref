@@ -1,13 +1,13 @@
 ﻿namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Application.Queries;
 
-public record FeedbackReportViewModel
+public record FeedbackReport
 {
     public Guid Id { get; init; }
     public int PublicId { get; init; }
     public required string FirstName { get; init; }
     public string? MiddleName { get; init; }
     public required string LastName { get; init; }
-    public virtual List<ReplyMethodViewModel> ReplyMethods { get; set; }
+    public virtual List<ReplyMethod> ReplyMethods { get; set; }
     public string? POBox { get; init; }
     public string? Street { get; init; }
     public string? PostalCode { get; init; }
@@ -27,7 +27,7 @@ public record FeedbackReportViewModel
     public Guid? InvestigationId { get; init; }
 }
 
-public record ReplyMethodViewModel
+public record ReplyMethod
 {
     public int Id { get; init; }
     public string Name { get; init; }
