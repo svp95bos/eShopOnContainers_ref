@@ -297,6 +297,28 @@ services:
       - SelfUrl=http://webhooks-client/
     ports:
       - "5114:80"
+
+  feedbackreporting-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Kestrel__Endpoints__HTTP__Url=http://0.0.0.0:80
+      - Kestrel__Endpoints__GRPC__Url=http://0.0.0.0:81
+      - Kestrel__Endpoints__GRPC__Protocols=Http2
+      - ConnectionStrings__CatalogDb=${ESHOP_AZURE_FEEDBACKREPORTING_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.Deviation.FeedbackReportingDb;User Id=sa;Password=Pass@word;Encrypt=False;TrustServerCertificate=true}
+      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
+      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
+      - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
+      - UseCustomizationData=True
+      - AzureStorageEnabled=False
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+      - PATH_BASE=/feedbackreporting-api
+    ports:
+      - "80"
+      - "443"
+   
 volumes:
   eshop-sqldata:
     external: false
@@ -304,4 +326,5 @@ volumes:
     external: false
   eshop-basketdata:
     external: false
+
 
