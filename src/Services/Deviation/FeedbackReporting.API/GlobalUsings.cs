@@ -25,3 +25,5 @@ global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.AP
 global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Application.Models;
 global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Extensions;
 global using System.Runtime.Serialization;
+global using System.Data.SqlClient;
+global using Dapper;

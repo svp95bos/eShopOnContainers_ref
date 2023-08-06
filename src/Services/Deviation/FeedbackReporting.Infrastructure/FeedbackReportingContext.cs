@@ -5,7 +5,9 @@ public class FeedbackReportingContext : DbContext, IUnitOfWork
 {
     public const string DEFAULT_SCHEMA = "feedbackreporting";
 
-    //public DbSet<FeedbackReport> Orders { get; set; }
+    public DbSet<FeedbackReportAggr> FeedbackReports { get; set; }
+    public DbSet<FeedbackReportReplyMethod> FeedbackReportReplyMethods { get; set; }
+
     private readonly IMediator _mediator;
     private IDbContextTransaction _currentTransaction;
 

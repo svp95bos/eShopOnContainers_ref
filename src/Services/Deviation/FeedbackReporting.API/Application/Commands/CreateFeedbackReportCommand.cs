@@ -16,7 +16,7 @@ namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.A
 [DataContract]
 public class CreateFeedbackReportCommand : IRequest<bool>
 {
-    private List<FeedbackReportDTO> _replyMethods { get; set; }
+    private List<ReplyMethodDTO> _replyMethods { get; set; }
 
     [DataMember]
     public string FirstName { get; set; }

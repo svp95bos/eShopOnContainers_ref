@@ -3,8 +3,8 @@ namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.Domai
 public abstract class Entity
 {
     int? _requestedHashCode;
-    int _Id;
-    public virtual int Id
+    Guid _Id;
+    public virtual Guid Id
     {
         get
         {
