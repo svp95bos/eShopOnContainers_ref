@@ -5,10 +5,13 @@ option csharp_namespace = "GrpcFeedbackReporting";
 package FeedbackReportingGrpcApi;
 
 service FeedbackReportingGrpc {
-	rpc CreateFeedbackReport(FeedbackReport) returns (FeedbackReportDTO) {}
+	rpc CreateFeedbackReport(CreateFeedbackReportCommand) returns (FeedbackReportDTO) {}
+    rpc GetFeedbackReportReplyMethod(FeedbackReportReplyMethodRequest) returns (FeedbackReportReplyMethodDTO) {}
+    rpc GetFeedbackReportReplyMethods(FeedbackReportReplyMethodsRequest) returns (FeedbackReportReplyMethodsDTO) {}
 }
 
-message FeedbackReport {
+// FeedbackReport definitions
+message CreateFeedbackReportCommand {
     string first_name = 1;
     optional string middle_name = 2;
     string last_name = 3;
@@ -34,7 +37,7 @@ message FeedbackReportDTO
     string first_name = 3;
     optional string middle_name = 4;
     string last_name = 5;
-    repeated FeedbackReportReplyMethod reply_methods = 6;
+    repeated FeedbackReportReplyMethodDTO reply_methods = 6;
     optional string po_box = 7;
     optional string street = 8;
     optional string postal_code = 9;
@@ -52,8 +55,21 @@ message FeedbackReportDTO
     bool is_read_only = 21;
 }
 
-message FeedbackReportReplyMethod {
+// FeedbackReportReplyMethod definitions
+message FeedbackReportReplyMethodRequest {
+    int32 id = 1;
+}
+
+message FeedbackReportReplyMethodsRequest {
+    optional string ids = 1;
+}
+
+message FeedbackReportReplyMethodDTO {
 	int32 id = 1;
 	string name = 2;
     bool is_enabled = 3;
+}
+
+message FeedbackReportReplyMethodsDTO {
+	repeated FeedbackReportReplyMethodDTO ReplyMethods = 1;
 }
