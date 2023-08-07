@@ -316,8 +316,8 @@ services:
       - OrchestratorType=${ORCHESTRATOR_TYPE}
       - PATH_BASE=/feedbackreporting-api
     ports:
-      - "80"
-      - "443"
+      - "5110:80"
+      - "9110:81"
    
 volumes:
   eshop-sqldata:
