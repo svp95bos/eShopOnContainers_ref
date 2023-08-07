@@ -304,7 +304,7 @@ services:
       - Kestrel__Endpoints__HTTP__Url=http://0.0.0.0:80
       - Kestrel__Endpoints__GRPC__Url=http://0.0.0.0:81
       - Kestrel__Endpoints__GRPC__Protocols=Http2
-      - ConnectionStrings__CatalogDb=${ESHOP_AZURE_FEEDBACKREPORTING_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.Deviation.FeedbackReportingDb;User Id=sa;Password=Pass@word;Encrypt=False;TrustServerCertificate=true}
+      - ConnectionStrings__FeedbackReportingDb=${ESHOP_AZURE_FEEDBACKREPORTING_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.Deviation.FeedbackReportingDb;User Id=sa;Password=Pass@word;Encrypt=False;TrustServerCertificate=true}
       - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
       - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
