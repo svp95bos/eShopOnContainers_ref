@@ -1,4 +1,6 @@
 ﻿
+using Azure.Core;
+
 using Microsoft.IdentityModel.Tokens;
 
 namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Infrastructure;
@@ -198,15 +200,28 @@ internal class FeedbackReportingContextSeed
             throw new Exception("FeedbackReport ReportDescription is empty.");
         }
 
-        return new FeedbackReport
-        {
-            FirstName = firstName,
-            MiddleName = middleName,
-            LastName = lastName,
-            Created = createdDate,
-            Description = reportDescription,
-            ReplyMethods = new() { feedbackMethods.RandomElement() }
-        };
+        var feedbackReport = new FeedbackReport(
+            city: "SIMRISHAMN",
+            phone: "1234565",
+            middleName: middleName,
+            lastName: lastName,
+            firstName: firstName,
+            pOBox: "Box 34",
+            email: "",
+            description: "Detta är ett klagomål",
+            createdBy: Guid.Parse("{00000000-0000-0000-0000-000000000000}"),
+            country: "Sverige",
+            postalCode: "27733",
+            street: "Storvägen 1",
+            updatedBy: Guid.Parse("{00000000-0000-0000-0000-000000000000}"),
+            workPhone: "987656534"
+            );
+
+        feedbackReport.AddReplyMethod(feedbackMethods.RandomElement());
+
+        return feedbackReport;
+
+
     }
 
     private string[] GetHeaders(string csvfile, string[] requiredHeaders, string[] optionalHeaders = null)
@@ -257,14 +272,28 @@ internal class FeedbackReportingContextSeed
             throw new Exception("No feedback methods found.");
         }
 
+        var feedbackReport = new FeedbackReport(
+            city: "SIMRISHAMN",
+            phone: "1234565",
+            middleName: "",
+            lastName: "Andersson",
+            firstName: "Allan",
+            pOBox: "Box 34",
+            email: "",
+            description: "Detta är ett klagomål",
+            createdBy: Guid.Parse("{00000000-0000-0000-0000-000000000000}"),
+            country: "Sverige",
+            postalCode: "27733",
+            street: "Storvägen 1",
+            updatedBy: Guid.Parse("{00000000-0000-0000-0000-000000000000}"),
+            workPhone: "987656534"
+            );
+
+        feedbackReport.AddReplyMethod(feedbackMethods.RandomElement());
+
         return new List<FeedbackReport>()
         {
-            new() {
-                FirstName = "Nisse",
-                LastName = "Nilsson",
-                Created = DateTimeOffset.Now,
-                Description = "Sample feedback report",
-                ReplyMethods = new() { feedbackMethods.RandomElement() }  }
+            feedbackReport
         };
     }
 }

@@ -3,7 +3,6 @@
 public class FeedbackReportRepository : IFeedbackReportRepository
 {
     private readonly FeedbackReportingContext _context;
-
     public IUnitOfWork UnitOfWork => _context;
 
     public FeedbackReportRepository(FeedbackReportingContext context)
