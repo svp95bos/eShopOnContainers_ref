@@ -6,12 +6,16 @@ internal class FeedbackReportConfiguration : IEntityTypeConfiguration<FeedbackRe
 {
     public void Configure(EntityTypeBuilder<FeedbackReport> builder)
     {
-        builder.ToTable("FeedbackReports", t => t.IsTemporal(
+        builder.ToTable("FeedbackReports", 
+            FeedbackReportingContext.DEFAULT_SCHEMA, 
+            t => t.IsTemporal(
             tt =>
             {
                 tt.HasPeriodStart("DataValidFrom");
                 tt.HasPeriodEnd("DataValidTo");
             }
             ));
+
+        builder.Ignore(b => b.DomainEvents);
     }
 }

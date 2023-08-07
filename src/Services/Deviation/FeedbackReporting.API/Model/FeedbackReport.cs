@@ -1,12 +1,12 @@
 ﻿
 
+using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Infrastructure.Repositories;
+
 namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Model;
 
-public class FeedbackReport
+public class FeedbackReport 
+    : Entity, IAggregateRoot
 {
-    // IEntity members
-    public Guid Id { get; set; }
-
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int PublicId { get; set; }
     public required string FirstName { get; set; }

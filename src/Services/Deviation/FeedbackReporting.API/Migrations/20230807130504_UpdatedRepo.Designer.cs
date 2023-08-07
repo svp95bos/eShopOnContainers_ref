@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Infrastructure;
 
@@ -11,9 +12,11 @@ using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Infra
 namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Migrations
 {
     [DbContext(typeof(FeedbackReportingContext))]
-    partial class FeedbackReportingContextModelSnapshot : ModelSnapshot
+    [Migration("20230807130504_UpdatedRepo")]
+    partial class UpdatedRepo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

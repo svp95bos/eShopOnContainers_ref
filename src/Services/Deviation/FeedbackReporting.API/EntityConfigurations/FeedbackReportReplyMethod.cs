@@ -4,6 +4,6 @@ internal class FeedbackReportReplyMethodConfiguration : IEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<FeedbackReportReplyMethod> builder)
     {
-        builder.ToTable("FeedbackReplyMethods");
+        builder.ToTable("FeedbackReplyMethods", FeedbackReportingContext.DEFAULT_SCHEMA);
     }
 }

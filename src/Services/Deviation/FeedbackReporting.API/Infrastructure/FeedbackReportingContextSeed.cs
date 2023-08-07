@@ -200,7 +200,6 @@ internal class FeedbackReportingContextSeed
 
         return new FeedbackReport
         {
-            Id = id,
             FirstName = firstName,
             MiddleName = middleName,
             LastName = lastName,
@@ -261,7 +260,6 @@ internal class FeedbackReportingContextSeed
         return new List<FeedbackReport>()
         {
             new() {
-                Id = Guid.Parse("{9D4E5FFA-C906-486A-B417-EF6E55DE1A80}"),
                 FirstName = "Nisse",
                 LastName = "Nilsson",
                 Created = DateTimeOffset.Now,
