@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
 
 using static FeedbackReportingGrpcApi.FeedbackReportingGrpc;
 
@@ -16,4 +16,6 @@ public class FeedbackReportingService : FeedbackReportingGrpcBase
         _feedbackReportingContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         _logger = logger;
     }
+
+    
 }

@@ -21,3 +21,4 @@ global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using Services.Common;
 global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Grpc;
+global using Microsoft.EntityFrameworkCore;

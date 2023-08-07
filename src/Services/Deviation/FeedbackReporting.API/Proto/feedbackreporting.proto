@@ -3,12 +3,17 @@ syntax = "proto3";
 package FeedbackReportingGrpcApi;
 
 service FeedbackReportingGrpc {
-	rpc CreateFeedbackReport(CreateFeedbackReportCommand) returns (FeedbackReportDTO) {}
-    rpc GetFeedbackReportReplyMethod(FeedbackReportReplyMethodRequest) returns (FeedbackReportReplyMethodDTO) {}
+	rpc GetFeedbackReports(FeedbackReportsRequest) returns (FeedbackReportsDTO) {}
+    rpc CreateFeedbackReport(CreateFeedbackReportCommand) returns (FeedbackReportDTO) {}
     rpc GetFeedbackReportReplyMethods(FeedbackReportReplyMethodsRequest) returns (FeedbackReportReplyMethodsDTO) {}
 }
 
 // FeedbackReport definitions
+message FeedbackReportsRequest
+{
+    string ids = 1;
+}
+
 message CreateFeedbackReportCommand {
     string first_name = 1;
     optional string middle_name = 2;
@@ -53,11 +58,11 @@ message FeedbackReportDTO
     bool is_read_only = 21;
 }
 
-// FeedbackReportReplyMethod definitions
-message FeedbackReportReplyMethodRequest {
-    int32 id = 1;
+message FeedbackReportsDTO {
+    repeated FeedbackReportDTO reports = 1;
 }
 
+// FeedbackReportReplyMethod definitions
 message FeedbackReportReplyMethodsRequest {
     optional string ids = 1;
 }
@@ -69,5 +74,5 @@ message FeedbackReportReplyMethodDTO {
 }
 
 message FeedbackReportReplyMethodsDTO {
-	repeated FeedbackReportReplyMethodDTO ReplyMethods = 1;
+	repeated FeedbackReportReplyMethodDTO reply_methods = 1;
 }
