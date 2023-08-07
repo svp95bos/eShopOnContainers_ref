@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcFeedbackReporting";
+
+package FeedbackReportingGrpcApi;
+
+service FeedbackReportingGrpc {
+	rpc CreateFeedbackReport(FeedbackReport) returns (FeedbackReportDTO) {}
+}
+
+message FeedbackReport {
+    string first_name = 1;
+    optional string middle_name = 2;
+    string last_name = 3;
+    repeated int32 reply_methods = 4;
+    optional string po_box = 5;
+    optional string street = 6;
+    optional string postal_code = 7;
+    optional string city = 8;
+    optional string country = 9;
+    optional string phone = 10;
+    optional string work_phone = 11;
+    optional string email = 12;
+    string description = 13;
+    string created_by = 14;
+    optional string updated_by = 15;
+    optional bool is_read_only = 16;
+}
+
+message FeedbackReportDTO
+{
+    string id = 1;
+	int64 public_id = 2;
+    string first_name = 3;
+    optional string middle_name = 4;
+    string last_name = 5;
+    repeated FeedbackReportReplyMethod reply_methods = 6;
+    optional string po_box = 7;
+    optional string street = 8;
+    optional string postal_code = 9;
+    optional string city = 10;
+    optional string country = 11;
+    optional string phone = 12;
+    optional string work_phone = 13;
+    optional string email = 14;
+    string description = 15;
+    string created_date = 16;
+    string created_by = 17;
+    optional string updated_date = 18;
+    optional string updated_by = 19;
+    optional string investigation_id = 20;
+    bool is_read_only = 21;
+}
+
+message FeedbackReportReplyMethod {
+	int32 id = 1;
+	string name = 2;
+    bool is_enabled = 3;
+}
