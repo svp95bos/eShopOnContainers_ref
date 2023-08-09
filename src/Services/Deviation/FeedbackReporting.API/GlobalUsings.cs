@@ -31,3 +31,4 @@ global using Polly.Retry;
 global using Services.Common;
 
 global using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.IntegrationEvents;
+global using Dapper;
