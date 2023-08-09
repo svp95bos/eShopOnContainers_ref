@@ -29,15 +29,15 @@ public class FeedbackReportsController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(Queries.FeedbackReport), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Queries.FeedbackReport>> GetOrderAsync(Guid feedbackReportId)
+    public async Task<ActionResult<Queries.FeedbackReport>> GetFeedbackReportsAsync(Guid feedbackReportId)
     {
         try
         {
             //Todo: It's good idea to take advantage of GetOrderByIdQuery and handle by GetCustomerByIdQueryHandler
             //var order customer = await _mediator.Send(new GetOrderByIdQuery(orderId));
-            var order = await _feedbackReportQueries.GetFeedbackReportAsync(feedbackReportId);
+            var report = await _feedbackReportQueries.GetFeedbackReportAsync(feedbackReportId);
 
-            return order;
+            return report;
         }
         catch
         {
