@@ -15,40 +15,52 @@ public class FeedbackReportQueries : IFeedbackReportQueries
         using var connection = new SqlConnection(_connectionString);
         connection.Open();
 
-        var result = await connection.QueryAsync<dynamic>(
-            @"SELECT feedbackreporting.FeedbackReports.Id AS ReportId, 
-                feedbackreporting.FeedbackReports.PublicId, 
-                feedbackreporting.FeedbackReports.FirstName, 
-                feedbackreporting.FeedbackReports.MiddleName,
-                feedbackreporting.FeedbackReports.LastName,
-                feedbackreporting.FeedbackReports.POBox,
-                feedbackreporting.FeedbackReports.Street,
-                feedbackreporting.FeedbackReports.PostalCode, 
-                feedbackreporting.FeedbackReports.City,
-                feedbackreporting.FeedbackReports.Country,
-                feedbackreporting.FeedbackReports.Phone,
-                feedbackreporting.FeedbackReports.WorkPhone,
-                feedbackreporting.FeedbackReports.Email,
-                feedbackreporting.FeedbackReports.Description,
-                feedbackreporting.FeedbackReports.Created,
-                feedbackreporting.FeedbackReports.CreatedBy,
-                feedbackreporting.FeedbackReports.Updated, 
-                feedbackreporting.FeedbackReports.IsReadOnly,
-                feedbackreporting.FeedbackReports.UpdatedBy, 
-                feedbackreporting.FeedbackReplyMethods.Id AS ReplyMethodId, 
-                feedbackreporting.FeedbackReplyMethods.Name AS ReplyMethodName, 
-                feedbackreporting.FeedbackReplyMethods.Enabled AS ReplyMethodEnabled
-              FROM   feedbackreporting.FeedbackReplyMethods 
-              INNER JOIN
-                     feedbackreporting.FeedbackReportFeedbackReportReplyMethod ON 
-                        feedbackreporting.FeedbackReplyMethods.Id = feedbackreporting.FeedbackReportFeedbackReportReplyMethod.ReplyMethodsId INNER JOIN
-                     feedbackreporting.FeedbackReports ON 
-                        feedbackreporting.FeedbackReportFeedbackReportReplyMethod.FeedbackReportsId = feedbackreporting.FeedbackReports.Id
-              WHERE  (feedbackreporting.FeedbackReports.Id = @id)
-              ORDER BY feedbackreporting.FeedbackReports.Created"
-                , new { id }
-            );
+        var sql = @$"SELECT feedbackreporting.FeedbackReports.Id AS ReportId, 
+                            feedbackreporting.FeedbackReports.PublicId, 
+                            feedbackreporting.FeedbackReports.FirstName, 
+                            feedbackreporting.FeedbackReports.MiddleName,
+                            feedbackreporting.FeedbackReports.LastName,
+                            feedbackreporting.FeedbackReports.POBox,
+                            feedbackreporting.FeedbackReports.Street,
+                            feedbackreporting.FeedbackReports.PostalCode, 
+                            feedbackreporting.FeedbackReports.City,
+                            feedbackreporting.FeedbackReports.Country,
+                            feedbackreporting.FeedbackReports.Phone,
+                            feedbackreporting.FeedbackReports.WorkPhone,
+                            feedbackreporting.FeedbackReports.Email,
+                            feedbackreporting.FeedbackReports.Description,
+                            feedbackreporting.FeedbackReports.Created,
+                            feedbackreporting.FeedbackReports.CreatedBy,
+                            feedbackreporting.FeedbackReports.Updated, 
+                            feedbackreporting.FeedbackReports.IsReadOnly,
+                            feedbackreporting.FeedbackReports.UpdatedBy, 
+                            feedbackreporting.FeedbackReplyMethods.Id AS ReplyMethodId, 
+                            feedbackreporting.FeedbackReplyMethods.Name AS ReplyMethodName, 
+                            feedbackreporting.FeedbackReplyMethods.Enabled AS ReplyMethodEnabled
+                     FROM   feedbackreporting.FeedbackReports 
+                     INNER JOIN
+                            feedbackreporting.FeedbackReportFeedbackReportReplyMethod ON 
+                            feedbackreporting.FeedbackReports.Id = feedbackreporting.FeedbackReportFeedbackReportReplyMethod.FeedbackReportsId 
+                     INNER JOIN
+                            feedbackreporting.FeedbackReplyMethods ON 
+                            feedbackreporting.FeedbackReportFeedbackReportReplyMethod.ReplyMethodsId = feedbackreporting.FeedbackReplyMethods.Id
+                     WHERE  (feedbackreporting.FeedbackReports.Id = {id})
+                     ORDER BY feedbackreporting.FeedbackReports.Created";
 
+        var reports = await connection.QueryAsync<FeedbackReport, FeedbackReportReplyMethod, FeedbackReport>(sql, (feedbackReport, feedbackReportReplyMethod) =>
+        {
+            feedbackReport.ReplyMethods.Add(feedbackReportReplyMethod);
+            return feedbackReport;
+        }, splitOn: "ReplyMethodId");
+
+        var result = reports.GroupBy(r => r.Id).Select(g =>
+        {
+            var groupedReport = reports.First();
+            groupedReport.ReplyMethods.AddRange(reports.Select(rm => rm.ReplyMethods.Single()).ToList());
+            return groupedReport;
+        });
+
+        return result.FirstOrDefault();
 
     }
 
