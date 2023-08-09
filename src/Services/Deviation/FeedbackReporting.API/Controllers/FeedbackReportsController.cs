@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿
 using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Queries;
 
 namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Controllers;
@@ -8,18 +6,18 @@ namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.C
 [Route("api/v1/[controller]")]
 //[Authorize]
 [ApiController]
-public class FeedbackReportingController : ControllerBase
+public class FeedbackReportsController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IFeedbackReportQueries _feedbackReportQueries;
     //private readonly IIdentityService _identityService;
-    private readonly ILogger<FeedbackReportingController> _logger;
+    private readonly ILogger<FeedbackReportsController> _logger;
 
-    public FeedbackReportingController(
+    public FeedbackReportsController(
         IMediator mediator,
         IFeedbackReportQueries feedbackReportQueries,
         //IIdentityService identityService,
-        ILogger<FeedbackReportingController> logger)
+        ILogger<FeedbackReportsController> logger)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _feedbackReportQueries = feedbackReportQueries ?? throw new ArgumentNullException(nameof(feedbackReportQueries));

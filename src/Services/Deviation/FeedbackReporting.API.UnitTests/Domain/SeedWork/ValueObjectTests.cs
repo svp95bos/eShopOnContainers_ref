@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Model;
+
 namespace FeedbackReporting.API.UnitTests.Domain.SeedWork;
 public class ValueObjectTests
 {
