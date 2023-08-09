@@ -14,13 +14,12 @@ public class CreateFeedbackReportCommandHandler : IRequestHandler<CreateFeedback
     private readonly ILogger<CreateFeedbackReportCommandHandler> _logger;
 
     public CreateFeedbackReportCommandHandler(IFeedbackReportRepository orderRepository,
-        IFeedbackReportReplyMethodRepository replyMethodRepository,
         IMediator mediator,
         IFeedbackReportingIntegrationEventService orderingIntegrationEventService,
         ILogger<CreateFeedbackReportCommandHandler> logger)
     {
         _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
-        _replyMethodRepository = replyMethodRepository;
+        //_replyMethodRepository = replyMethodRepository;
         //_identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _orderingIntegrationEventService = orderingIntegrationEventService ?? throw new ArgumentNullException(nameof(orderingIntegrationEventService));
