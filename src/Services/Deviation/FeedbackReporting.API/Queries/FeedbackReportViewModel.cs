@@ -2,7 +2,7 @@
 
 public record FeedbackReport
 {
-    public Guid Id { get; init; }
+    public Guid ReportId { get; init; }
     public int PublicId { get; init; }
     public string FirstName { get; init; }
     public string? MiddleName { get; init; }
@@ -26,7 +26,7 @@ public record FeedbackReport
 
 public record FeedbackReportReplyMethod
 {
-    public int Id { get; init; }
-    public required string Name { get; init; }
-    public bool Enabled { get; init; } = true;
+    public int ReplyMethodId { get; init; }
+    public string ReplyMethodName { get; init; }
+    public bool ReplyMethodEnabled { get; init; } = true;
 }

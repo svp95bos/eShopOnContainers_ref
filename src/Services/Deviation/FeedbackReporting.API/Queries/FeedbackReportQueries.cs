@@ -53,7 +53,7 @@ public class FeedbackReportQueries : IFeedbackReportQueries
             return feedbackReport;
         }, splitOn: "ReplyMethodId");
 
-        var result = reports.GroupBy(r => r.Id).Select(g =>
+        var result = reports.GroupBy(r => r.ReportId).Select(g =>
         {
             var groupedReport = reports.First();
             groupedReport.ReplyMethods.AddRange(reports.Select(rm => rm.ReplyMethods.Single()).ToList());
@@ -64,8 +64,17 @@ public class FeedbackReportQueries : IFeedbackReportQueries
 
     }
 
-    public Task<IEnumerable<FeedbackReportReplyMethod>> GetFeedbackReportReplyMethodsAsync()
+    public async Task<IEnumerable<FeedbackReportReplyMethod>> GetFeedbackReportReplyMethodsAsync()
     {
-        throw new NotImplementedException();
+        using var connection = new SqlConnection(_connectionString);
+        connection.Open();
+
+        var sql = @"SELECT  Id AS ReplyMethodId, 
+                            Name AS ReplyMethodName, 
+                            Enabled AS ReplyMethodEnabled
+                    FROM    feedbackreporting.FeedbackReplyMethods
+                    ORDER BY ReplyMethodName";
+
+        return await connection.QueryAsync<FeedbackReportReplyMethod>(sql);
     }
 }
