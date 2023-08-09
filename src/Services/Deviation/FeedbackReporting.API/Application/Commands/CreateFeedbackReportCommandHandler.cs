@@ -1,8 +1,10 @@
 ﻿
 
+using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Model.DTO;
+
 namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Application.Commands;
 
-public class CreateFeedbackReportCommandHandler : IRequestHandler<CreateFeedbackReportCommand, bool>
+public class CreateFeedbackReportCommandHandler : IRequestHandler<CreateFeedbackReportCommand, FeedbackReportDTO>
 {
     private readonly IFeedbackReportRepository _orderRepository;
     private readonly IFeedbackReportReplyMethodRepository _replyMethodRepository;
@@ -25,7 +27,7 @@ public class CreateFeedbackReportCommandHandler : IRequestHandler<CreateFeedback
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<bool> Handle(CreateFeedbackReportCommand request, CancellationToken cancellationToken)
+    public async Task<FeedbackReportDTO> Handle(CreateFeedbackReportCommand request, CancellationToken cancellationToken)
     {
         var replyMethods = await _replyMethodRepository.GetAsync();
         // Add Integration event to clean the basket
@@ -64,7 +66,33 @@ public class CreateFeedbackReportCommandHandler : IRequestHandler<CreateFeedback
 
         _orderRepository.Add(feedbackReport);
 
-        return await _orderRepository.UnitOfWork
+        await _orderRepository.UnitOfWork
             .SaveEntitiesAsync(cancellationToken);
+
+        var createdReport = await _orderRepository.GetAsync(feedbackReport.Id);
+
+        return new FeedbackReportDTO()
+        {
+            Id = createdReport.Id,
+            City = createdReport.City,
+            Created = createdReport.Created,
+            Country = createdReport.Country,
+            CreatedBy = createdReport.CreatedBy,
+            Description = createdReport.Description,
+            Email = createdReport.Email,
+            FirstName = createdReport.FirstName,
+            IsReadOnly = createdReport.IsReadOnly,
+            LastName = createdReport.LastName,
+            MiddleName = createdReport.MiddleName,
+            Phone = createdReport.Phone,
+            POBox = createdReport.POBox,
+            PostalCode = createdReport.PostalCode,
+            PublicId = createdReport.PublicId,
+            ReplyMethods = createdReport.ReplyMethods,
+            Street = createdReport.Street,
+            Updated = createdReport.Updated,
+            UpdatedBy = createdReport.UpdatedBy,
+            WorkPhone = createdReport.WorkPhone
+        };
     }
 }

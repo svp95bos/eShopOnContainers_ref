@@ -1,10 +1,12 @@
 ﻿
+using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Model.DTO;
+
 using FeedbackReportReplyMethodDTO = Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Model.DTO.FeedbackReportReplyMethodDTO;
 
 namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Application.Commands;
 
 [DataContract]
-public record CreateFeedbackReportCommand : IRequest<bool>
+public record CreateFeedbackReportCommand : IRequest<FeedbackReportDTO>
 {
     [DataMember]
     private readonly List<FeedbackReportReplyMethodDTO> _replyMethods;

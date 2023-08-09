@@ -1,4 +1,7 @@
 ﻿
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Extensions;
+using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Application.Commands;
+using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Model.DTO;
 using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Queries;
 
 namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Controllers;
@@ -43,5 +46,21 @@ public class FeedbackReportsController : ControllerBase
         {
             return NotFound();
         }
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    public async Task<ActionResult<FeedbackReportDTO>> CreateFeedbackReportAsync([FromBody] CreateFeedbackReportCommand createFeedbackReportCommand)
+    {
+        _logger.LogInformation(
+            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+            createFeedbackReportCommand.GetGenericTypeName(),
+            nameof(createFeedbackReportCommand),
+            createFeedbackReportCommand,
+            createFeedbackReportCommand);
+
+        FeedbackReportDTO response = await _mediator.Send(createFeedbackReportCommand);
+
+        return CreatedAtAction(nameof(CreateFeedbackReportAsync), response);
     }
 }
