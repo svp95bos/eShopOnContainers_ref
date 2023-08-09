@@ -52,6 +52,7 @@ services:
       - WebShoppingAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5121
       - WebhooksApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5113
       - WebhooksWebClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5114
+      - FeedbackReportingApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5110
       - UseCustomizationData=True
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
@@ -253,6 +254,8 @@ services:
       - HealthChecksUI__HealthChecks__9__Uri=http://ordering-signalrhub/hc
       - HealthChecksUI__HealthChecks__10__Name=Ordering HTTP Background Check
       - HealthChecksUI__HealthChecks__10__Uri=http://ordering-backgroundtasks/hc
+      - HealthChecksUI__HealthChecks__11__Name=FeedbackReporting HTTP Check
+      - HealthChecksUI__HealthChecks__11__Uri=http://feedbackreporting-api/hc
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
     ports:
@@ -315,6 +318,8 @@ services:
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
       - PATH_BASE=/feedbackreporting-api
+      - GRPC_PORT=81
+      - PORT=80
     ports:
       - "5110:80"
       - "9110:81"
