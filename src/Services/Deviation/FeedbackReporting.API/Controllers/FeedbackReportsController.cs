@@ -1,8 +1,6 @@
 ﻿
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Extensions;
-using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Application.Commands;
 using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Model.DTO;
-using Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Queries;
 
 namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Controllers;
 
@@ -11,56 +9,97 @@ namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.C
 [ApiController]
 public class FeedbackReportsController : ControllerBase
 {
-    private readonly IMediator _mediator;
-    private readonly IFeedbackReportQueries _feedbackReportQueries;
-    //private readonly IIdentityService _identityService;
+    private readonly FeedbackReportingContext _dbContext;
     private readonly ILogger<FeedbackReportsController> _logger;
+    private readonly FeedbackReportingSettings _settings;
+    private readonly IFeedbackReportingIntegrationEventService _feedbackIntegrationEventService;
 
     public FeedbackReportsController(
-        IMediator mediator,
-        IFeedbackReportQueries feedbackReportQueries,
-        //IIdentityService identityService,
-        ILogger<FeedbackReportsController> logger)
+        FeedbackReportingContext dbContext, 
+        IOptionsSnapshot<FeedbackReportingSettings> settings,
+        ILogger<FeedbackReportsController> logger,
+        IFeedbackReportingIntegrationEventService feedbackIntegrationEventService)
     {
-        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _feedbackReportQueries = feedbackReportQueries ?? throw new ArgumentNullException(nameof(feedbackReportQueries));
-        //_identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _dbContext = dbContext;
+        _settings = settings.Value;
+        _feedbackIntegrationEventService = feedbackIntegrationEventService;
+
     }
 
     [Route("{feedbackReportId:guid}")]
     [HttpGet]
-    [ProducesResponseType(typeof(Queries.FeedbackReport), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Queries.FeedbackReport>> GetFeedbackReportsAsync(Guid feedbackReportId)
+    [ProducesResponseType(typeof(PaginatedItemsViewModel<FeedbackReport>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<FeedbackReport>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<PaginatedItemsViewModel<FeedbackReport>>> GetFeedbackReportsAsync([FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0, string ids = null)
     {
-        try
-        {
-            //Todo: It's good idea to take advantage of GetOrderByIdQuery and handle by GetCustomerByIdQueryHandler
-            //var order customer = await _mediator.Send(new GetOrderByIdQuery(orderId));
-            var report = await _feedbackReportQueries.GetFeedbackReportAsync(feedbackReportId);
+        List<FeedbackReport> itemsOnPage = new();
 
-            return report;
-        }
-        catch
+        long totalItems = 0;
+
+        if (!string.IsNullOrEmpty(ids))
         {
-            return NotFound();
+            var feedbackReports = await GetFeedbackReportsByIdsAsync(ids);
+
+            if (!feedbackReports.Any())
+            {
+                return BadRequest("ids value invalid. Must be comma-separated list of numbers");
+            }
+
+            totalItems = feedbackReports.Count;
+
+            itemsOnPage = feedbackReports
+               .OrderBy(c => c.Created)
+               .Skip(pageSize * pageIndex)
+               .Take(pageSize).ToList();
+
+            return new PaginatedItemsViewModel<FeedbackReport>(pageIndex, pageSize, totalItems, itemsOnPage);
+
         }
+
+        totalItems = await _dbContext.FeedbackReports
+            .LongCountAsync();
+
+        itemsOnPage = await _dbContext.FeedbackReports
+            .OrderBy(c => c.Created)
+            .Skip(pageSize * pageIndex)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PaginatedItemsViewModel<FeedbackReport>(pageIndex, pageSize, totalItems, itemsOnPage);
     }
 
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<FeedbackReportDTO>> CreateFeedbackReportAsync([FromBody] CreateFeedbackReportCommand createFeedbackReportCommand)
+    //[HttpPost]
+    //[ProducesResponseType(StatusCodes.Status201Created)]
+    //public async Task<ActionResult<FeedbackReportDTO>> CreateFeedbackReportAsync([FromBody] CreateFeedbackReportCommand createFeedbackReportCommand)
+    //{
+    //    _logger.LogInformation(
+    //        "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+    //        createFeedbackReportCommand.GetGenericTypeName(),
+    //        nameof(createFeedbackReportCommand),
+    //        createFeedbackReportCommand,
+    //        createFeedbackReportCommand);
+
+    //    FeedbackReportDTO response = await _mediator.Send(createFeedbackReportCommand);
+
+    //    return CreatedAtAction(nameof(CreateFeedbackReportAsync), response);
+    //}
+
+    private async Task<List<FeedbackReport>> GetFeedbackReportsByIdsAsync(string ids)
     {
-        _logger.LogInformation(
-            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-            createFeedbackReportCommand.GetGenericTypeName(),
-            nameof(createFeedbackReportCommand),
-            createFeedbackReportCommand,
-            createFeedbackReportCommand);
+        var numIds = ids.Split(',').Select(id => (Ok: Guid.TryParse(id, out Guid x), Value: x));
 
-        FeedbackReportDTO response = await _mediator.Send(createFeedbackReportCommand);
+        if (!numIds.All(nid => nid.Ok))
+        {
+            return new List<FeedbackReport>();
+        }
 
-        return CreatedAtAction(nameof(CreateFeedbackReportAsync), response);
+        var idsToSelect = numIds
+            .Select(id => id.Value);
+
+        var feedbackReports = await _dbContext.FeedbackReports.Where(ci => idsToSelect.Contains(ci.Id)).ToListAsync();
+
+        return feedbackReports;
     }
 }
