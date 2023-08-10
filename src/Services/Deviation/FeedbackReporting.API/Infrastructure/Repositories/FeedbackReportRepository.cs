@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Infrastructure.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.Infrastructure.Repositories;
 
 public class FeedbackReportRepository : IFeedbackReportRepository
 {
@@ -59,5 +61,19 @@ public class FeedbackReportRepository : IFeedbackReportRepository
         }
 
         return report;
+    }
+
+    public async Task<IEnumerable<FeedbackReport>> GetAsync()
+    {
+        var reports = await _context.FeedbackReports.ToListAsync();
+
+        return reports;
+    }
+
+    public async Task<IEnumerable<FeedbackReport>> GetAsync(List<Guid> ids)
+    {
+        var feedbackReports = await _context.FeedbackReports.Where(ci => ids.Contains(ci.Id)).ToListAsync();
+
+        return feedbackReports;
     }
 }

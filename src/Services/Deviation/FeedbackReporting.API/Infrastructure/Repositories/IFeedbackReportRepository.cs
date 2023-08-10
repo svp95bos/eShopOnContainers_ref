@@ -17,4 +17,8 @@ public interface IFeedbackReportRepository : IRepository<FeedbackReport>
     /// <param name="reportId"></param>
     /// <returns></returns>
     Task<FeedbackReport> GetAsync(int publicId);
+
+    Task<IEnumerable<FeedbackReport>> GetAsync();
+
+    Task<IEnumerable<FeedbackReport>> GetAsync(List<Guid> ids);
 }

@@ -9,38 +9,38 @@ namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.C
 [ApiController]
 public class FeedbackReportsController : ControllerBase
 {
-    private readonly FeedbackReportingContext _dbContext;
+    private readonly IFeedbackReportRepository _repository;
     private readonly ILogger<FeedbackReportsController> _logger;
     private readonly FeedbackReportingSettings _settings;
     private readonly IFeedbackReportingIntegrationEventService _feedbackIntegrationEventService;
 
     public FeedbackReportsController(
-        FeedbackReportingContext dbContext, 
+        IFeedbackReportRepository repository,
         IOptionsSnapshot<FeedbackReportingSettings> settings,
         ILogger<FeedbackReportsController> logger,
         IFeedbackReportingIntegrationEventService feedbackIntegrationEventService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _dbContext = dbContext;
+        _repository = repository;
         _settings = settings.Value;
         _feedbackIntegrationEventService = feedbackIntegrationEventService;
 
     }
 
-    [Route("{feedbackReportId:guid}")]
+    [Route("{feedbackReportIds:string}")]
     [HttpGet]
     [ProducesResponseType(typeof(PaginatedItemsViewModel<FeedbackReport>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(IEnumerable<FeedbackReport>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<PaginatedItemsViewModel<FeedbackReport>>> GetFeedbackReportsAsync([FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0, string ids = null)
+    public async Task<ActionResult<PaginatedItemsViewModel<FeedbackReport>>> GetFeedbackReportsAsync([FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0, string feedbackReportIds = null)
     {
         List<FeedbackReport> itemsOnPage = new();
 
         long totalItems = 0;
 
-        if (!string.IsNullOrEmpty(ids))
+        if (!string.IsNullOrEmpty(feedbackReportIds))
         {
-            var feedbackReports = await GetFeedbackReportsByIdsAsync(ids);
+            var feedbackReports = await GetFeedbackReportsByIdsAsync(feedbackReportIds);
 
             if (!feedbackReports.Any())
             {
@@ -58,33 +58,46 @@ public class FeedbackReportsController : ControllerBase
 
         }
 
-        totalItems = await _dbContext.FeedbackReports
-            .LongCountAsync();
+        totalItems = (await _repository.GetAsync()).LongCount();
 
-        itemsOnPage = await _dbContext.FeedbackReports
+
+        var allItemsOnPage = (await _repository.GetAsync()).ToList();
+
+        
+        itemsOnPage = allItemsOnPage
             .OrderBy(c => c.Created)
             .Skip(pageSize * pageIndex)
-            .Take(pageSize)
-            .ToListAsync();
+            .Take(pageSize).ToList();
 
         return new PaginatedItemsViewModel<FeedbackReport>(pageIndex, pageSize, totalItems, itemsOnPage);
     }
 
-    //[HttpPost]
-    //[ProducesResponseType(StatusCodes.Status201Created)]
-    //public async Task<ActionResult<FeedbackReportDTO>> CreateFeedbackReportAsync([FromBody] CreateFeedbackReportCommand createFeedbackReportCommand)
-    //{
-    //    _logger.LogInformation(
-    //        "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-    //        createFeedbackReportCommand.GetGenericTypeName(),
-    //        nameof(createFeedbackReportCommand),
-    //        createFeedbackReportCommand,
-    //        createFeedbackReportCommand);
+    [HttpPost]
+    [ProducesResponseType(typeof(FeedbackReportDTO), StatusCodes.Status201Created)]
+    public async Task<ActionResult> CreateFeedbackReportAsync([FromBody] FeedbackReportDTO feedbackData, CancellationToken cancellationToken = default)
+    {
+        var item = new FeedbackReport(
+            firstName: feedbackData.FirstName,
+            middleName: feedbackData.MiddleName,
+            lastName: feedbackData.LastName,
+            pOBox: feedbackData.POBox,
+            street: feedbackData.Street,
+            postalCode: feedbackData.PostalCode,
+            city: feedbackData.City,
+            country: feedbackData.Country,
+            phone: feedbackData.Phone,
+            workPhone: feedbackData.WorkPhone,
+            email: feedbackData.Email,
+            description: feedbackData.Description,
+            createdBy: Guid.Empty,
+            updatedBy: Guid.Empty
+            );
 
-    //    FeedbackReportDTO response = await _mediator.Send(createFeedbackReportCommand);
+        _repository.Add(item);
+        await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-    //    return CreatedAtAction(nameof(CreateFeedbackReportAsync), response);
-    //}
+        return CreatedAtAction(nameof(CreateFeedbackReportAsync), new { id = item.Id }, null);
+    }
 
     private async Task<List<FeedbackReport>> GetFeedbackReportsByIdsAsync(string ids)
     {
@@ -98,8 +111,8 @@ public class FeedbackReportsController : ControllerBase
         var idsToSelect = numIds
             .Select(id => id.Value);
 
-        var feedbackReports = await _dbContext.FeedbackReports.Where(ci => idsToSelect.Contains(ci.Id)).ToListAsync();
+        var feedbackReports = await _repository.GetAsync(idsToSelect.ToList());
 
-        return feedbackReports;
+        return feedbackReports.ToList();
     }
 }
