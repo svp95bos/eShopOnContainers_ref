@@ -92,4 +92,12 @@ public static class Extensions
 
         return services;
     }
+
+    public static IServiceCollection AddRepositoryServices(this IServiceCollection services)
+    {
+        services.AddTransient<IFeedbackReportRepository, FeedbackReportRepository>();
+        services.AddTransient<IFeedbackReportReplyMethodRepository, FeedbackReportReplyMethodRepository>();
+
+        return services;
+    }
 }

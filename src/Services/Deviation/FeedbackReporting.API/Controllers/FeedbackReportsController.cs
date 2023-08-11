@@ -27,7 +27,7 @@ public class FeedbackReportsController : ControllerBase
 
     }
 
-    [Route("{feedbackReportIds:string}")]
+    [Route("reports")]
     [HttpGet]
     [ProducesResponseType(typeof(PaginatedItemsViewModel<FeedbackReport>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(IEnumerable<FeedbackReport>), StatusCodes.Status200OK)]
@@ -72,6 +72,7 @@ public class FeedbackReportsController : ControllerBase
         return new PaginatedItemsViewModel<FeedbackReport>(pageIndex, pageSize, totalItems, itemsOnPage);
     }
 
+    [Route("reports")]
     [HttpPost]
     [ProducesResponseType(typeof(FeedbackReportDTO), StatusCodes.Status201Created)]
     public async Task<ActionResult> CreateFeedbackReportAsync([FromBody] FeedbackReportDTO feedbackData, CancellationToken cancellationToken = default)

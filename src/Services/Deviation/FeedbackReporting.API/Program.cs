@@ -14,6 +14,7 @@ builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddDbContexts(builder.Configuration);
 builder.Services.AddApplicationOptions(builder.Configuration);
 builder.Services.AddIntegrationServices();
+builder.Services.AddRepositoryServices();
 
 //builder.Services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
 //builder.Services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
