@@ -9,19 +9,19 @@ namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.C
 [ApiController]
 public class FeedbackReportsController : ControllerBase
 {
-    private readonly IFeedbackReportRepository _repository;
+    private readonly IRepositoryManager _repositories;
     private readonly ILogger<FeedbackReportsController> _logger;
     private readonly FeedbackReportingSettings _settings;
     private readonly IFeedbackReportingIntegrationEventService _feedbackIntegrationEventService;
 
     public FeedbackReportsController(
-        IFeedbackReportRepository repository,
+        IRepositoryManager repositories,
         IOptionsSnapshot<FeedbackReportingSettings> settings,
         ILogger<FeedbackReportsController> logger,
         IFeedbackReportingIntegrationEventService feedbackIntegrationEventService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _repository = repository;
+        _repositories = repositories;
         _settings = settings.Value;
         _feedbackIntegrationEventService = feedbackIntegrationEventService;
 
@@ -58,10 +58,10 @@ public class FeedbackReportsController : ControllerBase
 
         }
 
-        totalItems = (await _repository.GetAsync()).LongCount();
+        totalItems = (await _repositories.FeedbackReportRepository.GetAsync()).LongCount();
 
 
-        var allItemsOnPage = (await _repository.GetAsync()).ToList();
+        var allItemsOnPage = (await _repositories.FeedbackReportRepository.GetAsync()).ToList();
 
         
         itemsOnPage = allItemsOnPage
@@ -75,7 +75,7 @@ public class FeedbackReportsController : ControllerBase
     [Route("reports")]
     [HttpPost]
     [ProducesResponseType(typeof(FeedbackReportDTO), StatusCodes.Status201Created)]
-    public async Task<ActionResult> CreateFeedbackReportAsync([FromBody] FeedbackReportDTO feedbackData, CancellationToken cancellationToken = default)
+    public async Task<ActionResult> CreateFeedbackReportAsync([FromBody] FeedbackReportDTO_Create feedbackData, CancellationToken cancellationToken = default)
     {
         var item = new FeedbackReport(
             firstName: feedbackData.FirstName,
@@ -92,10 +92,19 @@ public class FeedbackReportsController : ControllerBase
             description: feedbackData.Description,
             createdBy: Guid.Empty,
             updatedBy: Guid.Empty
-            );
+       );
 
-        _repository.Add(item);
-        await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        var allReplyMethods = await _repositories.FeedbackReportReplyMethodRepository.GetAsync();
+
+        var replyMethods = allReplyMethods.Where(rm => feedbackData.Equals(rm.Id));
+
+        foreach(var method in replyMethods) 
+        {
+            item.AddReplyMethod(method);
+        }
+
+        _repositories.FeedbackReportRepository.Add(item);
+        await _repositories.FeedbackReportRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return CreatedAtAction(nameof(CreateFeedbackReportAsync), new { id = item.Id }, null);
     }
@@ -112,7 +121,7 @@ public class FeedbackReportsController : ControllerBase
         var idsToSelect = numIds
             .Select(id => id.Value);
 
-        var feedbackReports = await _repository.GetAsync(idsToSelect.ToList());
+        var feedbackReports = await _repositories.FeedbackReportRepository.GetAsync(idsToSelect.ToList());
 
         return feedbackReports.ToList();
     }

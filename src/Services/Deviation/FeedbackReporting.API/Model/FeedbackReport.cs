@@ -7,7 +7,10 @@ namespace Microsoft.eShopOnContainers.Services.Deviation.FeedbackReporting.API.M
 public class FeedbackReport 
     : Entity, IAggregateRoot
 {
-    public FeedbackReport(string firstName, string? middleName, string lastName, string? pOBox, string? street, string? postalCode, string? city, string? country, string? phone, string? workPhone, string? email, string description, Guid createdBy, Guid? updatedBy)
+    protected FeedbackReport() => _replyMethods = new();
+
+    public FeedbackReport(string firstName, string? middleName, string lastName, string? pOBox, string? street, string? postalCode, string? city, string? country, string? phone, string? workPhone, string? email, string description, Guid createdBy, Guid? updatedBy) 
+        : this()
     {
         FirstName = firstName;
         MiddleName = middleName;
